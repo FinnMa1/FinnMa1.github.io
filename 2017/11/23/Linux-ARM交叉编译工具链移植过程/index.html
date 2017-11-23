@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" >
     <title>
         
-        Hello blog · Be yourself
+        Linux ARM交叉编译工具链移植过程 · Be yourself
         
     </title>
     <link rel="icon" href= /assests/favicon.ico>
@@ -63,7 +63,7 @@
                 <a href="/" >Home</a>
             </div>
             <div class="post-title">
-                <a href="#" class="post-name">Hello blog</a>
+                <a href="#" class="post-name">Linux ARM交叉编译工具链移植过程</a>
             </div>
     </div>
     
@@ -84,7 +84,7 @@
         <h1 class="intro-title">
             <!-- 主页  -->
             
-            Hello blog
+            Linux ARM交叉编译工具链移植过程
             <!-- 404 -->
             
         </h1>
@@ -102,13 +102,13 @@
             
                 <div class= post-intro-tags >
     
-        <a class="post-tag" href="javascript:void(0);" data-href = essay>essay</a>
+        <a class="post-tag" href="javascript:void(0);" data-href = Linux>Linux</a>
     
 </div>
             
             <div class="post-intro-meta">
                 <span class="post-intro-calander iconfont-archer">&#xe676;</span>
-                <span class="post-intro-time">2017/11/22</span>
+                <span class="post-intro-time">2017/11/23</span>
             </div>
         
     </div>
@@ -179,22 +179,76 @@
         <div class="container container-unloaded">
             <main class="main post-page">
     <article class="article-entry">
-        <h1 id="welcome-to-my-blog"><a href="#welcome-to-my-blog" class="headerlink" title="welcome to my blog "></a><center><font>welcome to my blog </font></center></h1><h1 id="写在前面："><a href="#写在前面：" class="headerlink" title="写在前面："></a>写在前面：</h1><p>　　本人真·菜鸟，最近才接触这些东西(github，hexo等(..•˘_˘•..))，<br>搭建这些环境也遇到了很多的问题（有些问题没管第二天居然就好了 (╯°Д°)╯︵ ┻━┻），<br>也花费了很多时间，但是总的来说还是学习到了很多东西。<br>　　博客会偶尔更新一些文章上去(看心情咯(｡◕ˇ∀ˇ◕）)<br>　　最后同时感谢隔壁<a href="https://cloudsen.github.io/" target="_blank" rel="noopener">大佬</a>的支持。</p>
+        <p>操作系统：Ubuntu 32位<br>版本号：16.04.3 LTS</p>
+<hr>
+<h3 id="名词解释"><a href="#名词解释" class="headerlink" title="名词解释"></a>名词解释</h3><p><strong>交叉编译</strong>：<br>　　指在A平台(如windows)上编译生成，在B平台(如arm)上运行的过程。这个两个平台具有不同的机器指令。<br><br>　　如果不采用交叉编译，我们在A平台（如windows）上编译出来的可执行文件只能运行在X86的CPU下，无法在B平台（如arm）上运行。<br><strong>工具链</strong>：由编译器、连接器、解释器和调试器组成  　<em>(没有编辑器)</em></p>
+<h3 id="一、下载交叉编译包"><a href="#一、下载交叉编译包" class="headerlink" title="一、下载交叉编译包"></a>一、下载交叉编译包</h3><p>　　我这里所使用的是<a href="https://pan.baidu.com/s/1jItKtL0" target="_blank" rel="noopener">arm4.5.1.tar.gz</a></p>
 <blockquote>
-<p><em>注：很多东西都还没有完善，目前只有先将就一下咯</em></p>
+<p>密码: vwmr</p>
 </blockquote>
+<hr>
+<h3 id="二、把下载的交叉编译包放入自己的Linux共享目录下"><a href="#二、把下载的交叉编译包放入自己的Linux共享目录下" class="headerlink" title="二、把下载的交叉编译包放入自己的Linux共享目录下"></a>二、把下载的交叉编译包放入自己的Linux共享目录下</h3><ul>
+<li>进入共享目录<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /mnt/hgfs/share/arm-tools  <span class="comment">#share为我自己共享目录下的文件夹</span></span><br><span class="line">ls                  <span class="comment">#查看交叉编译工具包是否在该目录，不存在则重新设置共享文件夹</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p><br><br><em>如下图显示：</em><br><img src="https://raw.githubusercontent.com/FinnMa1/blog/master/arm-linux.png" alt=""></p>
+<p><br></p>
+<ul>
+<li>把arm4.5.1.tar.gz复制到/usr/local/arm-linux下<blockquote>
+<p>arm-linux是我自己创建的目录，用于存放交叉编译工具链</p>
+</blockquote>
+</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo -s cp /mnt/hgfs/share/arm4.5.1.tar.gz  /usr/<span class="built_in">local</span>/arm-linux</span><br></pre></td></tr></table></figure>
+<hr>
+<h3 id="三、解压"><a href="#三、解压" class="headerlink" title="三、解压"></a>三、解压</h3><ul>
+<li><p>进入/usr/local/arm-linux目录，并解压此包</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /usr/<span class="built_in">local</span>/arm-linux</span><br><span class="line">tar -zxvf arm4.5.1.tar.gz</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>解压完成后我们可以得到名为4.5.1的目录<br><img src="https://raw.githubusercontent.com/FinnMa1/blog/master/arm-linux2.png" alt=""></p>
+</li>
+</ul>
+<ul>
+<li>进入到该目录的/bin目录下,可以得到交叉编译程序集合<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> 4.5.1/bin</span><br><span class="line">ls</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p><br><br><em>如下图显示：</em></p>
+<h2 id=""><a href="#" class="headerlink" title=""></a><img src="https://raw.githubusercontent.com/FinnMa1/blog/master/arm-linux3.png" alt=""></h2><h3 id="四、修改配置，并使其生效"><a href="#四、修改配置，并使其生效" class="headerlink" title="四、修改配置，并使其生效"></a>四、修改配置，并使其生效</h3><ul>
+<li>修改环境变量（这里只介绍永久保存环境变量的方法）<br>　　在家目录下(<figure class="highlight plain"><figcaption><span>/```)，修改~/.bashrc 这个文件(```vi ~/.bashrc 或者 gedit ~/.bashrc```)，在文件最后添加以下的命令后，保存并退出</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">```bash</span><br><span class="line">export PATH=$PATH:/usr/local/arm-linux/4.5.1/bin</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/FinnMa1/blog/master/bashrc.png" alt=""></p>
+<ul>
+<li>立即使用新的环境变量<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">source</span> ~/.bashrc</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="-1"><a href="#-1" class="headerlink" title=""></a><br></h2><h3 id="五、检查是否安装成功"><a href="#五、检查是否安装成功" class="headerlink" title="五、检查是否安装成功"></a>五、检查是否安装成功</h3><ul>
+<li>以上配置完成后，建议打开一个新的shell终端</li>
+<li>测试arm-linux-gcc<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">arm-linux-gcc -v</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p><br><br><em>如下图显示：</em><br><img src="https://raw.githubusercontent.com/FinnMa1/blog/master/arm-linux4.png" alt=""></p>
+<hr>
+<h3 id="六、使用交叉编译工具链编译程序"><a href="#六、使用交叉编译工具链编译程序" class="headerlink" title="六、使用交叉编译工具链编译程序"></a>六、使用交叉编译工具链编译程序</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">arm-linux-gcc hello.c -I./ -L./ -o hello -lm -std=c99</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>与gcc使用方法完成一样，只是把以前的gcc 替换成arm-linux-gcc</p>
+</blockquote>
+<p>　　　查看交叉编译后的文件<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">file hello</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>hello: ELF 32-bit LSB executable, <code>ARM</code>, EABI5 version 1 (SYSV), dynamically linked, interpreter /lib/ld-linux.so.3, for GNU/Linux 2.6.27, not stripped</p>
+</blockquote>
+<p>显示为arm的可执行文件</p>
 
     </article>
     <!-- 前后页  -->
     <ul class="post-pager">
         
-            <li class="next">
-                <a href= "/2017/11/23/Linux-ARM交叉编译工具链移植过程/" title= Linux ARM交叉编译工具链移植过程 >
-                    <span>Next Post</span>
-                    <span>Linux ARM交叉编译工具链移植过程</span>
+        
+            <li class="previous">
+                <a href= "/2017/11/22/hello blog/" title= Hello blog >
+                    <span>Previous Post</span>
+                    <span>Hello blog</span>
                 </a>
             </li>
-        
         
     </ul>
     <!-- 评论插件 -->
@@ -259,7 +313,7 @@
         <div class="toc-catalog">
             <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
         </div>
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#welcome-to-my-blog"><span class="toc-number">1.</span> <span class="toc-text">welcome to my blog </span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#写在前面："><span class="toc-number">2.</span> <span class="toc-text">写在前面：</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#名词解释"><span class="toc-number">1.</span> <span class="toc-text">名词解释</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#一、下载交叉编译包"><span class="toc-number">2.</span> <span class="toc-text">一、下载交叉编译包</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#二、把下载的交叉编译包放入自己的Linux共享目录下"><span class="toc-number">3.</span> <span class="toc-text">二、把下载的交叉编译包放入自己的Linux共享目录下</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#三、解压"><span class="toc-number">4.</span> <span class="toc-text">三、解压</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#"><span class="toc-number"></span> <span class="toc-text"></span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#四、修改配置，并使其生效"><span class="toc-number">1.</span> <span class="toc-text">四、修改配置，并使其生效</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-1"><span class="toc-number"></span> <span class="toc-text"></span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#五、检查是否安装成功"><span class="toc-number">1.</span> <span class="toc-text">五、检查是否安装成功</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#六、使用交叉编译工具链编译程序"><span class="toc-number">2.</span> <span class="toc-text">六、使用交叉编译工具链编译程序</span></a></li></ol>
     </div>
     
     <div class="back-top">&#xe639;</div>
