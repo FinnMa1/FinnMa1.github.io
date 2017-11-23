@@ -215,8 +215,9 @@
 <p><br><br><em>如下图显示：</em><br><img src="https://raw.githubusercontent.com/FinnMa1/blog/master/arm-linux3.png" alt=""></p>
 <hr>
 <h3 id="修改配置，并使其生效"><a href="#修改配置，并使其生效" class="headerlink" title="修改配置，并使其生效"></a>修改配置，并使其生效</h3><ul>
-<li>修改环境变量（这里只介绍永久保存环境变量的方法）<br>　　在家目录下(<figure class="highlight plain"><figcaption><span>/```)，修改~/.bashrc 这个文件(```vi ~/.bashrc 或者 gedit ~/.bashrc```)，在文件最后添加以下的命令后，保存并退出</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">```bash</span><br><span class="line">export PATH=$PATH:/usr/local/arm-linux/4.5.1/bin</span><br></pre></td></tr></table></figure></li>
+<li>修改环境变量（这里只介绍永久保存环境变量的方法）<br>　　在家目录下(cd /)，修改~/.bashrc 这个文件(vi ~/.bashrc 或者 gedit ~/.bashrc)，在文件最后添加以下的命令后，保存并退出<br></li>
 </ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> PATH=<span class="variable">$PATH</span>:/usr/<span class="built_in">local</span>/arm-linux/4.5.1/bin</span><br></pre></td></tr></table></figure>
 <p><img src="https://raw.githubusercontent.com/FinnMa1/blog/master/bashrc.png" alt=""></p>
 <ul>
 <li>立即使用新的环境变量<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">source</span> ~/.bashrc</span><br></pre></td></tr></table></figure>
